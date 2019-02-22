@@ -35,6 +35,10 @@ BuildRequires:	gc-devel
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# avoid super weird provides
+# crystal(Tuple(T)#unsafe_fetch<Int32>:String)(64bit) crystal(src/compiler/crystal/command.cr:344)(64bit)
+%define		_noautoprov	crystal
+
 # Filter GLIBC_PRIVATE Requires
 %define		_noautoreq	(GLIBC_PRIVATE)
 
