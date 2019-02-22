@@ -29,7 +29,7 @@ BuildRequires:	pcre-devel
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRequires:	yaml-devel
-%if %{with tests}
+%if %{with tests} || %{without bootstrap}
 BuildRequires:	gc-devel
 %endif
 ExclusiveArch:	%{x8664}
@@ -72,8 +72,12 @@ CXXFLAGS="%{rpmcxxflags}" \
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1}
 install -p .build/crystal $RPM_BUILD_ROOT%{_bindir}/crystal
+cp -p man/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
+
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -a samples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -82,3 +86,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README.md CHANGELOG.md
 %attr(755,root,root) %{_bindir}/crystal
+%{_mandir}/man1/crystal.1*
+%{_examplesdir}/%{name}-%{version}
