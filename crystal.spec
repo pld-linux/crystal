@@ -25,8 +25,13 @@ BuildRequires:	libxml2-devel
 BuildRequires:	llvm-devel < 7.0
 BuildRequires:	llvm-devel >= 3.8
 BuildRequires:	openssl-devel
+BuildRequires:	pcre-devel
+BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRequires:	yaml-devel
+%if %{with tests}
+BuildRequires:	gc-devel
+%endif
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -47,18 +52,21 @@ Crystal is a programming language with the following goals:
 %setup -q %{?with_bootstrap:-a1}
 
 %build
-%if %{with bootstrao}
+%if %{with bootstrap}
 PATH=$PATH:crystal-%{bootstrap_ver}-1/bin
 %endif
 
 CFLAGS="%{rpmcflags}" \
 CXXFLAGS="%{rpmcxxflags}" \
-%{__make} \
+%{__make} progress=true stats=true \
+	CC="%{__cc}" \
 	CXX="%{__cxx}"
 %{?with_tests:%{__make} spec}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_bindir}
+install -p .build/crystal $RPM_BUILD_ROOT%{_bindir}/crystal
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -66,3 +74,4 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README.md CHANGELOG.md
+%attr(755,root,root) %{_bindir}/crystal
