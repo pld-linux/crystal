@@ -16,8 +16,8 @@ BuildRequires:	libbsd-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libevent-devel
 BuildRequires:	libxml2-devel
-BuildRequires:	llvm < 7.0
-BuildRequires:	llvm >= 3.8
+BuildRequires:	llvm-devel < 7.0
+BuildRequires:	llvm-devel >= 3.8
 BuildRequires:	openssl-devel
 BuildRequires:	readline-devel
 BuildRequires:	yaml-devel
