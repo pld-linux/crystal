@@ -35,6 +35,9 @@ BuildRequires:	gc-devel
 ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# Filter GLIBC_PRIVATE Requires
+%define		_noautoreq	(GLIBC_PRIVATE)
+
 %description
 This is the language reference for the Crystal programming language.
 
