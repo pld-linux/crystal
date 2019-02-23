@@ -1,7 +1,8 @@
 #
 # Conditional build:
 %bcond_with	bootstrap	# bootstrap build
-%bcond_without	tests		# build without tests
+%bcond_without	tests	# build without tests
+%bcond_without	apidocs	# do not build and package API docs
 
 # this probably does not have to be very latest
 %define		bootstrap_ver	0.27.2
@@ -55,6 +56,14 @@ Crystal is a programming language with the following goals:
   boilerplate code.
 - Compile to efficient native code.
 
+%package apidocs
+Summary:	crystal API documentation
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+API documentation for crystal.
+
 %prep
 %setup -q %{?with_bootstrap:-a1}
 
@@ -68,6 +77,7 @@ CXXFLAGS="%{rpmcxxflags}" \
 %{__make} progress=true stats=true \
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
+%{?with_apidocs:%{__make} docs}
 %{?with_tests:%{__make} spec}
 
 %install
@@ -88,3 +98,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/crystal
 %{_mandir}/man1/crystal.1*
 %{_examplesdir}/%{name}-%{version}
+
+%if %{with apidocs}
+%files apidocs
+%defattr(644,root,root,755)
+%doc docs/*
+%endif
